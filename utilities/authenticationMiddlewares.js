@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt');
+const db = require('./../database/handler');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const authUilities = {

@@ -25,7 +25,7 @@ const db = {
             });
         });
     },
-    getTasksForUser: (id = 1) => {
+    getTasks: (id) => {
         return new Promise((resolve, reject) => {
             connection.query('SELECT * FROM tasks WHERE user_id = ?', id, (err, results) => {
                 if (err) return reject(err);
@@ -33,7 +33,7 @@ const db = {
             });
         });
     },
-    addTaskForUser: (task, id = 1) => {
+    addTask: (task, id) => {
         return new Promise((resolve, reject) => {
             connection.query('INSERT INTO tasks (title, time_created, user_id) VALUES (?, ?, ?)', [task.title, task.time_created, id], (err, results) => {
                 if (err) return reject(err);
@@ -41,7 +41,7 @@ const db = {
             });
         });
     },
-    updateTaskForUser: (task, id = 1) => {
+    updateTask: (task, id) => {
         return new Promise((resolve, reject) => {
             connection.query('UPDATE tasks SET title = ? WHERE task_id = ? AND user_id = ?', [task.title, task.task_id, id], (err, results) => {
                 if (err) return reject(err);
@@ -49,7 +49,7 @@ const db = {
             });
         });
     },
-    deleteTaskForUser: (task_id, id = 1) => {
+    deleteTask: (task_id, id) => {
         return new Promise((resolve, reject) => {
             connection.query('DELETE FROM tasks WHERE task_id = ? AND user_id = ?', [task_id, id], (err, results) => {
                 if (err) return reject(err);
@@ -57,9 +57,9 @@ const db = {
             });
         });
     },
-    changeStatusOfTaskForUser: (task_id, status = 1, id = 1) => {
+    changeStatusOfTask: (task_id, id) => {
         return new Promise((resolve, reject) => {
-            connection.query('UPDATE tasks SET status = ? WHERE task_id = ? AND user_id = ?', [status, task_id, id], (err, results) => {
+            connection.query('UPDATE tasks SET status = not status WHERE task_id = ? AND user_id = ?', [task_id, id], (err, results) => {
                 if (err) return reject(err);
                 return resolve(results);
             });

@@ -15,11 +15,11 @@ router.post('/api/users/signup', function(req, res, _next) {
 
   db.getUser(email)
     .then((results) => {
-      if (results.length > 0) res.status(400).send('User already exists');
+      if (results.length > 0) res.status(405).send('User already exists');
       else {
         db.createUser(name, email, authUilities.hashPassword(password))
           .then((results) => {
-            res.status(200).send('User created');
+            res.status(201).send('User created');
           })
           .catch((err) => {
             res.status(500).send('Error creating user');
@@ -30,7 +30,6 @@ router.post('/api/users/signup', function(req, res, _next) {
       console.log(err);
       res.status(500).send('Error creating user');
     });
-  
 });
 
 router.post('/api/users/login', (req, res, _next) => {
@@ -40,9 +39,10 @@ router.post('/api/users/login', (req, res, _next) => {
   authUilities.authenicateUser(email, password)
     .then((user) => {
       let token = authUilities.generateToken(user);
-      res.status(200).send(token);
+      res.status(200).send({ token: token });
     })
     .catch((err) => {
+      console.log(err);
       res.status(401).send('Invalid credentials');
     });
 });
